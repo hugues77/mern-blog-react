@@ -1,0 +1,25 @@
+header {
+  //   color: #222;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  align-items: center;
+  margin-top: 10px;                  
+
+  a{
+    text-decoration: none;
+    color: inherit;
+    font-size: 17px;
+    font-weight: 500;
+
+    
+  }
+  .logo{
+    font-weight: bold; 
+    font-size: 1.5rem;  
+  }
+  nav{
+    display: flex;
+    gap: 20px;
+  }
+}
