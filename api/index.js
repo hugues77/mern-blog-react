@@ -27,7 +27,7 @@ app.use(cookieParser);
 //mongoDB connection
 mongoose
   .connect(
-    "mongodb+srv://hugues-mern:jOSxRc3cSHFutkwC@cluster0.omery.mongodb.net/blog"
+    "mongodb+srv://hugues-mern:<PASSWORD>@cluster0.omery.mongodb.net/blog"
   )
   .then(() => console.log("Connexion database ok"))
   .catch(() => console.log("Connexion refusée"));
