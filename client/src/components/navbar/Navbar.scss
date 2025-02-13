@@ -4,21 +4,20 @@ header {
   justify-content: space-between;
   margin-bottom: 20px;
   align-items: center;
-  margin-top: 10px;                  
+  margin-top: 10px;
 
-  a{
+  a {
     text-decoration: none;
     color: inherit;
     font-size: 17px;
     font-weight: 500;
-
-    
+    cursor: pointer;
   }
-  .logo{
-    font-weight: bold; 
-    font-size: 1.5rem;  
+  .logo {
+    font-weight: bold;
+    font-size: 1.5rem;
   }
-  nav{
+  nav {
     display: flex;
     gap: 20px;
   }

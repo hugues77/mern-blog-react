@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./Register.scss";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   async function Register(ev) {
     ev.preventDefault();
@@ -14,7 +17,8 @@ const Register = () => {
     });
 
     if (response.status === 200) {
-      alert("Inscription reussi");
+      // alert("Inscription reussi");
+      navigate("/login");
     } else {
       alert("Inscription échouée, réessayer. Merci");
     }
@@ -26,12 +30,14 @@ const Register = () => {
         <h2>Inscription Form</h2>
         <input
           type="text"
+          name="username"
           placeholder="Username"
           value={username}
           onChange={(ev) => setUsername(ev.target.value)}
         />
         <input
           type="password"
+          name="password"
           placeholder="Mot de passe"
           value={password}
           onChange={(ev) => setPassword(ev.target.value)}

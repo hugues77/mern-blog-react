@@ -1,18 +1,25 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./Navbar.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [username, setUsername] = useState(null);
-  useEffect(() => {
-    fetch("http://localhost:4000/my-profil", {
-      credentials: "include",
-    }).then((response) => {
-      response.json().then((userInfo) => {
-        setUsername(userInfo.username);
-      });
-    });
-  });
+  const Navigate = useNavigate();
+  // const { tokenID } = localStorage.getItem("token");
+  const user = localStorage.getItem("username");
+
+  const [username, setUsername] = useState(user);
+  // const [token, setToken] = useState(tokenID);
+
+  //function logout
+  const logout = () => {
+    localStorage.clear("");
+    setUsername(null);
+    // setToken(null);
+    // <Navigate to={"/"} />;
+    Navigate("/");
+  };
+
+  // const username = userInfo?.username;
   return (
     <div>
       <header>
@@ -23,7 +30,7 @@ const Navbar = () => {
           {username ? (
             <>
               <Link to="/create">Nouveau Post</Link>
-              <Link to="/logout">Déconnexion</Link>
+              <a onClick={logout}>Déconnexion</a>
             </>
           ) : (
             <>

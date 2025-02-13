@@ -1,10 +1,22 @@
 form {
-  max-width: 500px;
+  max-width: 700px;
   margin: 0 auto;
   padding-top: 20px;
 
   h2 {
     text-align: center;
+  }
+  .alert-message {
+    padding: 10px 20px;
+    width: 100%;
+    font-size: 14px;
+    background: crimson;
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 500;
+  }
+  .hide-message {
+    display: none;
   }
 
   input {
