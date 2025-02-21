@@ -10,17 +10,21 @@ const Register = () => {
 
   async function Register(ev) {
     ev.preventDefault();
-    const response = await fetch("http://localhost:4000/register", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch("http://localhost:4000/register", {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/json" },
+      });
 
-    if (response.status === 200) {
-      // alert("Inscription reussi");
-      navigate("/login");
-    } else {
-      alert("Inscription échouée, réessayer. Merci");
+      if (response.status === 200) {
+        // alert("Inscription reussi");
+        navigate("/login");
+      } else {
+        alert("Inscription échouée, réessayer. Merci");
+      }
+    } catch (e) {
+      alert("Registration failed. Try again later", e);
     }
   }
 

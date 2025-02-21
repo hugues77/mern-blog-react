@@ -2,23 +2,30 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
+const fs = require("fs");
 
-//recup user model
+//recup user model - database
 const User = require("./models/User");
+const Post = require("./models/Post");
 
 //bcrypt
-const bcrypt = require("bcryptjs");
 const salt = bcrypt.genSaltSync(10);
 
 //JWT
-const jwt = require("jsonwebtoken");
 const jwt_secret = "jloiztydddiygdsdsqkhsyqudfshdihyfsh";
-const cookieParser = require("cookie-parser");
 
 //multer pour les images
 const multer = require("multer");
 const uploadMiddleware = multer({ dest: "uploads/" });
-const fs = require("fs");
+
+app.use(express.json());
+app.use(cookieParser());
+
+//static uploads image
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 // app.use(cors());
 app.use(
@@ -27,8 +34,6 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
-app.use(express.json());
-app.use(cookieParser());
 
 //mongoDB connection
 mongoose
@@ -58,37 +63,98 @@ app.post("/register", async (req, res) => {
 //login user
 app.post("/login", async (req, res) => {
   try {
-    // const { username, password } = req.body;
-    const userDoc = await User.findOne({ username: req.body.username });
+    const { username, password } = req.body;
+    const userDoc = await User.findOne({ username });
     if (!userDoc) {
       res.status(401).json({ message: "Pas de connexion, réessayer!" });
       // res.json({ message: "ECHEC PAPA" });
       return;
     }
-    const verifyPass = bcrypt.compareSync(req.body.password, userDoc.password);
+    const verifyPass = bcrypt.compareSync(password, userDoc.password);
     if (!verifyPass) {
-      res.status(401).json({ message: "Pas de connexion MDP, réessayer!" });
+      res.status(400).json({ message: "Pas de connexion MDP, réessayer!" });
       // res.json({ message: "ECHEC PAPA" });
       return;
+    } else {
+      //logged and create token
+      jwt.sign(
+        { username, userId: userDoc._id },
+        jwt_secret,
+        {},
+        (err, token) => {
+          if (err) throw err;
+          res.cookie("token", token).json({
+            token,
+            username,
+            userId: userDoc._id,
+          });
+          // console.log("login ok");
+        }
+      );
+      // const expiryDate = new Date(Date.now() + 3600000); //1 heure de connexion
+      // const tokenValid = jwt.sign({ id: userDoc._id }, jwt_secret, {
+      //   expiresIn: "12h",
+      // }); //on va utiliser les cookies
+      // res.status(200).json({
+      //   token: tokenValid,
+      //   username,
+      //   userId: userDoc._id,
+      // });
     }
-    // const expiryDate = new Date(Date.now() + 3600000); //1 heure de connexion
-    const tokenValid = jwt.sign({ id: userDoc._id }, jwt_secret);
-
-    res.status(200).json({ token: tokenValid, username: userDoc.username });
   } catch (error) {
     res.status(500).json({ error });
   }
 });
 
+//page profile user
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, jwt_secret, {}, (err, info) => {
+    if (err) throw err;
+    res.json(info);
+  });
+});
+
+//page logout
+app.post("/logout", (req, res) => {
+  res.cookie("token", "").json("ok logout");
+});
+
 //poster article
-app.post("/post", uploadMiddleware.single("file"), (req, res) => {
+app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
   const { originalname, path } = req.file;
   const parts = originalname.split(".");
   const extension = parts[parts.length - 1];
   const newPath = path + "." + extension;
   fs.renameSync(path, newPath);
-  // res.json({ files: req.file });
-  res.json(parts[1]);
+
+  const { token } = req.cookies;
+
+  jwt.verify(token, jwt_secret, {}, async (err, info) => {
+    if (err) throw err;
+    const { title, summary, content } = req.body;
+    const postDoc = await Post.create({
+      title,
+      summary,
+      content,
+      cover: newPath,
+      author: info.userId,
+    });
+    res.json(postDoc);
+
+    // console.log(info.id);
+  });
+});
+
+//afficher les posts
+app.get("/post", async (req, res) => {
+  // const posts = await Post.find();
+  res.json(
+    await Post.find()
+      .populate("author", ["username"])
+      .sort({ createdAt: -1 })
+      .limit(20)
+  );
 });
 
 //test

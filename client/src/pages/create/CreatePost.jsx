@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import "./Create.scss";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
@@ -12,25 +13,13 @@ const modules = {
     ["clean"],
   ],
 };
-// const formats = [
-//   "header",
-//   "bold",
-//   "italic",
-//   "underline",
-//   "strike",
-//   "blockquote",
-//   "list",
-//   "bullet",
-//   "indent",
-//   "link",
-//   "image",
-// ];
 
 const CreatePost = () => {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   const createNewPost = async (ev) => {
     const data = new FormData();
@@ -43,10 +32,17 @@ const CreatePost = () => {
     const response = await fetch("http://localhost:4000/post", {
       method: "POST",
       body: data,
+      credentials: "include",
     });
-    console.log(await response.json());
+    // console.log(await response.json());
+    if (response.ok) {
+      setRedirect(true);
+    }
   };
 
+  if (redirect) {
+    return <Navigate to={"/"} />;
+  }
   return (
     <form onSubmit={createNewPost}>
       <input
