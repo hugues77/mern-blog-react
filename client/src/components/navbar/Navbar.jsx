@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   const { userInfo, setUserInfo } = useContext(UserContext);
   // const [username, setUsername] = useState(null);
+  // const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     fetch("http://localhost:4000/profile", {
@@ -51,8 +52,11 @@ const Navbar = () => {
         <nav>
           {username && (
             <>
-              <Link to="/create">Créer New Post</Link>
-              <a onClick={logout}>Logout</a>
+              <div className="profil">
+                <a className="author">Bonjour, {username} </a>
+                <Link to="/create">Créer New Post</Link>
+                <a onClick={logout}>Logout</a>
+              </div>
             </>
           )}
           {!username && (

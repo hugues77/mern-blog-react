@@ -1,12 +1,24 @@
 .post {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  // grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
   margin-bottom: 35px;
+  @media screen and (min-width: 700px) {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
+  }
+  .image-cover {
+    width: 100%;
+    height: 250px;
   }
   p {
     text-align: justify;

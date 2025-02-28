@@ -4,6 +4,8 @@ import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import CreatePost from "./pages/create/CreatePost";
+import EditPost from "./pages/create/EditPost";
+import PostDetails from "./pages/postDetails/postDetails";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/create" element={<CreatePost />} />
+        <Route path="/edit/:id" element={<EditPost />} />
+        <Route path="/post/:id" element={<PostDetails />} />
       </Routes>
     </div>
   );

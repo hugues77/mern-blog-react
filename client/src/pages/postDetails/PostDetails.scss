@@ -1,0 +1,51 @@
+.post-page {
+  .image {
+    width: 100%;
+    max-height: 200px;
+    display: flex;
+    overflow: hidden;
+
+    img {
+      object-fit: cover;
+      object-position: center center;
+    }
+  }
+  .text {
+    text-align: justify;
+    line-height: 1.2rem;
+  }
+  .title {
+    text-align: center;
+    margin: 10px 0 10px 0;
+  }
+  .content {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: space-between;
+    color: #aaa;
+    font-size: 0.8rem;
+
+    span {
+      font-weight: bold;
+    }
+    .edit-post {
+      // margin-bottom: 5px;
+
+      a {
+        text-decoration: none;
+        background: #333;
+        color: #fff;
+        padding: 10px 30px;
+        border-radius: 6px;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        svg {
+          height: 22px;
+          fill: #fff;
+        }
+      }
+    }
+  }
+}

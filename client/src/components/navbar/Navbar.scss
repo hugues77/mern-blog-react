@@ -12,6 +12,7 @@ header {
     font-size: 17px;
     font-weight: 500;
     cursor: pointer;
+    margin-right: 12px;
   }
   .logo {
     font-weight: bold;
@@ -20,5 +21,11 @@ header {
   nav {
     display: flex;
     gap: 20px;
+  }
+  .author {
+    background: #333;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 6px;
   }
 }
